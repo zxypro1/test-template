@@ -1,0 +1,42 @@
+---
+edition: "3.0.0"
+name: "test-template-d9e0"
+access: "default"
+vars: {}
+resources:
+  hollow-uganda:
+    component: "fc3"
+    actions:
+      complete-deploy:
+      - plugin: "flow_api_registry"
+      complete-remove:
+      - plugin: "flow_api_registry"
+    props:
+      logConfig: "auto"
+      handler: "index.handler"
+      diskSize: 10240
+      memorySize: 2048
+      code: "hollow-uganda/{ossObjectName=hello-world/python3.10.zip, ossBucketName=code-sample-cn-hangzhou}"
+      functionName: "{{ projectName }}-hollow-uganda"
+      cpu: 1
+      runtime: "python3.10"
+      region: "{{ region }}"
+      timeout: 60
+  faithful-umbrella:
+    component: "fc3"
+    actions:
+      complete-deploy:
+      - plugin: "flow_api_registry"
+      complete-remove:
+      - plugin: "flow_api_registry"
+    props:
+      logConfig: "auto"
+      handler: "index.handler"
+      diskSize: 10240
+      memorySize: 2048
+      code: "faithful-umbrella/{ossObjectName=hello-world/nodejs18.zip, ossBucketName=code-sample-cn-hangzhou}"
+      functionName: "{{ projectName }}-faithful-umbrella"
+      cpu: 1
+      runtime: "nodejs18"
+      region: "{{ region }}"
+      timeout: 60
