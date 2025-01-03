@@ -1,0 +1,31 @@
+---
+shared:
+  DB_USERNAME:
+    title: "数据库账号名"
+    description: "由小写字母、大写字母、数字、下划线（_）组成，以字母开头，以字母或数字结尾，最多32个字符"
+    type: "string"
+    sensitive: false
+    default: "capuser"
+    required: true
+    enum: []
+  DB_DATABASE_NAME:
+    title: "数据库名称"
+    description: "由小写字母、数字、下划线（_）、中划线（-）组成，以小写字母开头，小写字母或数字结尾，最多64个字符"
+    type: "string"
+    sensitive: false
+    default: "cap-auto-db"
+    required: true
+  DB_PASSWORD:
+    title: "数据库账号密码"
+    description: "必须包含大写字母、小写字母、数字和特殊字符，长度为 8 到 32 个字符"
+    type: "string"
+    sensitive: true
+    required: true
+services:
+  obnoxious-country:
+    test:
+      title: "test"
+      description: "CAP变量，由项目创建模板时自动生成"
+      type: "string"
+      sensitive: true
+      required: true

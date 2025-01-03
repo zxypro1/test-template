@@ -1,0 +1,105 @@
+---
+edition: "3.0.0"
+name: "new-test-template-bh19"
+access: "default"
+vars:
+  region: "{{ region }}"
+  projectName: "{{ projectName }}"
+resources:
+  harsh-yak:
+    component: "fc3"
+    actions:
+      complete-deploy:
+      - plugin: "flow_api_registry"
+      complete-remove:
+      - plugin: "flow_api_registry"
+    props:
+      logConfig: "auto"
+      handler: "index.handler"
+      diskSize: 10240
+      memorySize: 2048
+      code: "harsh-yak"
+      functionName: "${vars.projectName}-harsh-yak"
+      cpu: 1
+      runtime: "python3.10"
+      region: "${vars.region}"
+      timeout: 60
+  obnoxious-country:
+    component: "fc3"
+    actions:
+      complete-deploy:
+      - plugin: "flow_api_registry"
+      complete-remove:
+      - plugin: "flow_api_registry"
+    props:
+      customRuntimeConfig:
+        port: 9000
+        command:
+        - "python3"
+        - "app.py"
+      logConfig: "auto"
+      handler: "index.handler"
+      functionName: "${vars.projectName}-obnoxious-country"
+      cpu: 1
+      runtime: "custom.debian10"
+      triggers:
+      - triggerConfig:
+          methods:
+          - "GET"
+          - "POST"
+          - "PUT"
+          - "DELETE"
+          authType: "anonymous"
+        triggerName: "httpTrigger"
+        triggerType: "http"
+      timeout: 60
+      customDomain:
+        protocol: "HTTP"
+        route:
+          path: "/*"
+          qualifier: "LATEST"
+        domainName: "auto"
+      instanceConcurrency: 100
+      diskSize: 10240
+      memorySize: 2048
+      environmentVariables:
+        PATH: "/var/fc/lang/python3.10/bin:/usr/local/bin/apache-maven/bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/ruby/bin:/opt/bin:/code:/code/bin"
+        PYTHONPATH: "/opt/python:/code"
+        LD_LIBRARY_PATH: "/code:/code/lib:/usr/local/lib:/opt/lib:/opt/php8.1/lib:/opt/php8.0/lib:/opt/php7.2/lib"
+      layers:
+      - "acs:fc:${vars.region}:official:layers/Python3-Flask2x/versions/2"
+      region: "${vars.region}"
+      code: "obnoxious-country"
+  steep-camera:
+    component: "flow"
+    actions:
+      complete-deploy: []
+      complete-remove: []
+    props:
+      role: "acs:ram::${config(\"AccountID\")}:role/aliyunfnfexecutionrole"
+      name: "${vars.projectName}-steep-camera"
+      executionMode: "Standard"
+      definition:
+        States:
+        - Type: "Pass"
+          Next: "Pass"
+          Name: "Hello World"
+        - Type: "Pass"
+          End: true
+          Name: "Pass"
+        Type: "StateMachine"
+        SpecVersion: "v1"
+        StartAt: "Hello World"
+        Name: "steep-camera"
+      region: "${vars.region}"
+  belligerent-market:
+    component: "rds"
+    actions: {}
+    props:
+      database: "${shared.DB_DATABASE_NAME}"
+      password: "${shared.DB_PASSWORD}"
+      engine: "PostgreSQL:16.0"
+      vpcID: "auto"
+      name: "{{RDS_Instance_kkme}}"
+      region: "${vars.region}"
+      username: "${shared.DB_USERNAME}"
